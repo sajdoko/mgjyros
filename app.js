@@ -2,9 +2,15 @@
 const express = require('express');
 const multer = require('multer');
 const bodyParser = require('body-parser');
+const path = require('path');
+require('dotenv').config()
 
 // SETUP APP
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname + '/views'));
+
 const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({
   extended: false
@@ -12,6 +18,13 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/public'));
 
+// Set GLOBALS
+app.use(function(req, res, next) {
+  res.locals.bardheZi = null;
+  res.locals.meNgjyra = null;
+  res.locals.fotoBardheZi = null;
+  next();
+});
 
 
 //MULTER CONFIG: to get file photos to temp server storage
@@ -53,7 +66,11 @@ const multerConfig = {
 /* ROUTES
  **********/
 app.get('/', function (req, res) {
-  res.render('index.html');
+  res.render('index');
+});
+
+app.get('/public/photo-storage/:foto', function (req, res) {
+  res.send('/public/photo-storage/:foto');
 });
 
 app.post('/', multer(multerConfig).single('fotoBardheZi'), function (req, res) {
@@ -64,7 +81,7 @@ app.post('/', multer(multerConfig).single('fotoBardheZi'), function (req, res) {
     request.post({
       url: 'https://api.deepai.org/api/colorizer',
       headers: {
-        'Api-Key': '0ea2392a-0e01-4080-883f-10cd3afb35fc'
+        'Api-Key': process.env.API
       },
       formData: {
         'image': fs.createReadStream('public/photo-storage/' + req.file.filename),
@@ -76,7 +93,10 @@ app.post('/', multer(multerConfig).single('fotoBardheZi'), function (req, res) {
       }
       var response = JSON.parse(body);
       console.log(response);
-      res.send(response)
+      res.render('index', {
+        bardheZi:  '/public/photo-storage/' + req.file.filename,
+        meNgjyra: response.output_url
+      });
     });
   }
 

@@ -17,7 +17,7 @@
     <div class="py-5 text-center">
       <img class="d-block mx-auto mb-3" src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" alt="" width="72"
         height="72">
-      <h2>Ngjyros Fotot</h2>
+      <h2>Ngjyros FOTOT</h2>
       <p class="lead">Sed cursus turpis vitae tortor. Suspendisse nisl elit, rhoncus eget, elementum ac, condimentum eget, diam. Mauris sollicitudin
         fermentum libero. Phasellus nec sem in justo pellentesque facilisis. Suspendisse enim turpis, dictum sed.</p>
     </div>
@@ -40,7 +40,17 @@
         </form>
       </div>
     </div>
-    <div id="rezultatet"></div>
+    <% if (bardheZi) { %>
+      <div id="rezultatet" class="row">
+          <div class="col-md-12">
+            <img class="img-fluid mx-auto" alt="500x500" src="<%= bardheZi %>" style="width: 100%;">
+          </div>
+          <div class="clearfix"></div>
+          <div class="col-md-12">
+            <img class="img-fluid mx-auto" alt="500x500" src="<%= meNgjyra %>" style="width: 100%;">
+          </div>
+      </div>
+    <% } %>
 
     <footer class="my-5 pt-5 text-muted text-center text-small">
       <p class="mb-1">&copy; 2018 Company Name</p>
